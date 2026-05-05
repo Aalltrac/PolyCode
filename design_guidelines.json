@@ -1,0 +1,154 @@
+{
+  "theme_archetype": {
+    "domain": "E-learning / Coding Platform",
+    "theme": "DARK",
+    "archetype": "Hybrid: Archetype 5 (Jewel & Luxury) + Archetype 7 (Electric / Code Terminal)",
+    "description": "A striking, highly secure, dark aesthetic. Avoids generic SaaS violet-on-white. Uses deep void black with subtle indigo/violet glowing mesh and obsidian textures. Emphasizes technical depth, luxury, and premium learning experience.",
+    "brand_name": "PolyCode School",
+    "language": "French"
+  },
+  "color_system": {
+    "css_variables": {
+      "--background": "240 25% 3%",
+      "--foreground": "0 0% 98%",
+      "--card": "240 20% 6%",
+      "--card-foreground": "0 0% 95%",
+      "--popover": "240 20% 6%",
+      "--popover-foreground": "0 0% 95%",
+      "--primary": "242 75% 66%",
+      "--primary-foreground": "0 0% 100%",
+      "--secondary": "240 15% 12%",
+      "--secondary-foreground": "0 0% 98%",
+      "--muted": "240 15% 10%",
+      "--muted-foreground": "240 5% 65%",
+      "--accent": "242 75% 66%",
+      "--accent-foreground": "0 0% 100%",
+      "--destructive": "0 84% 60%",
+      "--destructive-foreground": "0 0% 100%",
+      "--border": "242 40% 15%",
+      "--input": "242 40% 15%",
+      "--ring": "242 75% 66%",
+      "--radius": "0.5rem"
+    },
+    "tailwind_palette": {
+      "kofi": "#6A66EB",
+      "void-black": "#050508",
+      "obsidian": "#0A0A0F",
+      "border-indigo": "rgba(106, 102, 235, 0.2)"
+    },
+    "rules": {
+      "gradients": "Do not use full-screen flat color gradients. Use texture + radial glow. Highlight active states with the #6A66EB Ko-fi color.",
+      "backgrounds": "Keep the main background near #050508. Use #0A0A0F for cards.",
+      "text": "Never use pure white #FFFFFF for body text. Use #EDEDED (95% lightness) for readability.",
+      "transparency": "Do not use completely transparent backgrounds for surfaces that overlap content (e.g., sticky headers). Always use backdrop-blur + semi-transparent color."
+    }
+  },
+  "typography": {
+    "imports": "@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=JetBrains+Mono:wght@300;400;500;700&display=swap');",
+    "font_families": {
+      "heading": "'Bricolage Grotesque', sans-serif",
+      "body": "'JetBrains Mono', monospace",
+      "code": "'JetBrains Mono', monospace"
+    },
+    "hierarchy": {
+      "h1": "text-4xl sm:text-5xl lg:text-6xl font-black tracking-tighter",
+      "h2": "text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight",
+      "h3": "text-xl sm:text-2xl font-semibold",
+      "h4": "text-lg sm:text-xl font-medium",
+      "body": "text-base font-normal leading-relaxed",
+      "small_labels": "text-xs uppercase tracking-[0.2em] font-bold"
+    },
+    "rules": {
+      "anti_default": "BANNED: Inter, Roboto, Space Grotesk. Headings MUST be Bricolage Grotesque. Body MUST be JetBrains Mono.",
+      "contrast": "Ensure minimum 4.5:1 contrast ratio. Large headings can use subtle text-shadow for depth.",
+      "labels": "Use small, widely tracked uppercase JetBrains Mono for tags, ranks (#1-70), and category names."
+    }
+  },
+  "spacing_and_layout": {
+    "philosophy": "Generous spacing. The roadmap must feel like a learning journey/atlas, not a spreadsheet.",
+    "roadmap_grid": "Use Mode A: The 'Tetris' Grid. Asymmetric card placements. Instead of standard columns, use grid-cols-1 md:grid-cols-12 gap-8 with varying col-span values (e.g., col-span-4, col-span-6, col-span-8) to create an organic, branching skill-tree look.",
+    "dashboard_grid": "Use Mode B: The 'Control Room' Grid for the Admin Dashboard. Dense, border-collapse styles. 1px borders everywhere.",
+    "padding": "Containers with borders must use p-6 or p-8. Use py-24 for marketing sections.",
+    "mobile": "Always ensure max-w-full and overflow-x-hidden to prevent horizontal scrolling. Stack gracefully."
+  },
+  "components_strategy": {
+    "cards": {
+      "style": "The 'Tracing Beam' / Technical Look. 1px border of border-indigo, bg-obsidian. No soft shadows, use drop-shadow with the primary color for glow on hover.",
+      "hover": "Slight lift (-translate-y-1), border color becomes brighter #6A66EB, subtle glow."
+    },
+    "buttons": {
+      "primary": "bg-[#6A66EB] text-white hover:bg-[#5853D6] rounded-md px-6 py-2 font-body uppercase tracking-wider text-sm font-bold",
+      "secondary": "bg-transparent border border-[#6A66EB]/50 text-[#EDEDED] hover:bg-[#6A66EB]/10"
+    },
+    "navigation": {
+      "header": "Sticky glassmorphism header. bg-void-black/70 backdrop-blur-xl border-b border-[#6A66EB]/20 z-50."
+    },
+    "pdf_viewer": {
+      "watermark": "CRITICAL: Absolute positioned, pointer-events-none, z-[9999], repeated text of the user's email diagonally across the screen with opacity 0.1 to prevent screenshots.",
+      "tabs": "Shadcn Tabs component customized with JetBrains Mono, flat rectangular triggers."
+    },
+    "badges": {
+      "published": "bg-green-500/10 text-green-400 border border-green-500/20 font-code text-xs rounded-full",
+      "locked": "bg-red-500/10 text-red-400 border border-red-500/20 font-code text-xs rounded-full"
+    },
+    "kofi_widget": {
+      "style": "Floating at bottom-right, fixed, z-50. Button uses #6A66EB, pill shape, bounce animation."
+    }
+  },
+  "motion_and_interactions": {
+    "hover": "All interactive elements must have transition-all duration-200. Focus states require focus:ring-2 focus:ring-[#6A66EB].",
+    "entrance": "Use framer-motion for staggering the roadmap language cards. It should feel like loading a terminal sequence or unlocking a map.",
+    "accessibility": "Respect prefers-reduced-motion."
+  },
+  "images_and_assets": {
+    "logo": {
+      "url": "https://customer-assets.emergentagent.com/job_ac818131-9ea0-41f3-a2cd-265fcebd45c9/artifacts/6xm6vup0_14a490fc-0287-4667-b70e-0647d66f8b47-removebg-preview.png",
+      "description": "PolyCode School Logo. Stylized P with <P> brackets. Use in header and auth gate."
+    },
+    "hero_background": {
+      "url": "https://static.prod-images.emergentagent.com/jobs/ac818131-9ea0-41f3-a2cd-265fcebd45c9/images/d3775e7854456267c2921c22ee6bcac9a88166d9a28aab47e736c530d9d7d61e.png",
+      "description": "Deep violet and indigo glowing mesh abstract background. Use this for the Auth Gate background and the top hero section of the Roadmap with an overlay of bg-black/60."
+    },
+    "texture_obsidian": {
+      "url": "https://static.prod-images.emergentagent.com/jobs/ac818131-9ea0-41f3-a2cd-265fcebd45c9/images/9c4ae89c626d75e702cf43bb369d9ac15e8bccdc7ac93c76a32504113843ae91.png",
+      "description": "Abstract dark obsidian texture. Use as a subtle background pattern for the Course Detail Page or Admin Dashboard, opacity 10%."
+    },
+    "kofi_iframe": {
+      "instructions": "Embed the Ko-fi widget using standard iframe with URL parameter for the PolyCode account (mocked if not provided). Keep the brand color #6A66EB."
+    }
+  },
+  "page_specific_guidelines": {
+    "auth_page": {
+      "layout": "Full screen, centered bento-box card. Hero background image behind with heavy blur.",
+      "features": "Email/Password inputs + Google Sign-In button. JetBrains mono for inputs."
+    },
+    "roadmap_landing": {
+      "hero": "Massive H1 in Bricolage Grotesque. Subtle pulsing glow behind the text.",
+      "categories": "6 categories (Fondamentaux, Intermédiaire, Avancé, Spécialisé, Niche/Académique, Historique/Rare).",
+      "cards": "Language cards #1 to #70. Show rank prominently. Badge for Publié/Verrouillé. Asymmetric layout using different column spans."
+    },
+    "course_detail": {
+      "layout": "Clean sidebar for chapters, main content area for details. Locked chapters grayed out (opacity-50) with a lock icon."
+    },
+    "pdf_viewer_page": {
+      "security": "Disable right click via JS. Absolute positioned watermark over the iframe/canvas. The watermark must contain the user's email. No download button.",
+      "ui": "Full width tabs (Cours vs Correction)."
+    },
+    "admin_dashboard": {
+      "layout": "Grid Borders ('Technical' Look). Table for courses with toggle switches (Shadcn switch) for publish/unpublish.",
+      "modal": "Create Chapter dialog with Shadcn UI. Fields for Name, Google Drive link Cours, Google Drive link Correction."
+    },
+    "messaging": {
+      "layout": "Terminal-style chat interface. 1-to-1 user and admin. Monospaced timestamps."
+    }
+  },
+  "instructions_to_main_agent": [
+    "Install and use Bricolage Grotesque and JetBrains Mono from Google Fonts.",
+    "Install lucide-react for icons.",
+    "Ensure all interactive elements have data-testid attributes for testing.",
+    "Implement the Firebase Auth gate at the root level so the site cannot be accessed without login.",
+    "All labels and text MUST be in French.",
+    "Use raw HTML/Tailwind for the asymmetric Roadmap grid to allow flexible spans.",
+    "Use Shadcn UI for the Auth forms, Tabs (PDF Viewer), Dialog (Admin Modal), Switch, and Dropdown Menus."
+  ]
+}
