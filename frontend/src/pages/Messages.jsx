@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { db, ADMIN_UID } from "@/lib/firebase";
+import { db } from "@/lib/firebase";
 import {
   collection,
   doc,
@@ -13,39 +13,41 @@ import {
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Send, MessageSquare, User } from "lucide-react";
+import { Send, MessageSquare, User, Shield } from "lucide-react";
 
 export default function Messages() {
   const { user, isAdmin } = useAuth();
-  // For users: the conversation is identified by their own uid.
-  // For admin: select among all existing conversations.
   const [activeConversationId, setActiveConversationId] = useState(
     isAdmin ? null : user?.uid
   );
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8" data-testid="messages-page">
-      <div className="mb-6">
-        <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-[#6A66EB]">
-          // direct_message
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10" data-testid="messages-page">
+      <header className="mb-10">
+        <p className="font-mono text-[10px] uppercase tracking-[0.35em] text-[#6A66EB]">
+          // messages
         </p>
-        <h1 className="mt-1 font-display text-3xl sm:text-4xl font-black tracking-tighter text-white">
+        <h1 className="mt-2 font-display text-4xl sm:text-5xl font-black tracking-tighter text-white">
           {isAdmin ? "Boîte de réception" : "Discuter avec l'équipe"}
         </h1>
-        <p className="mt-2 font-mono text-xs text-[#A8A8B8]">
+        <p className="mt-2 max-w-lg font-mono text-xs text-[#A8A8B8]">
           {isAdmin
-            ? "Sélectionne un utilisateur pour répondre."
-            : "Pose tes questions, l'admin te répondra dès que possible."}
+            ? "Sélectionne un utilisateur pour lui répondre."
+            : "Pose tes questions — l'admin te répond dès que possible."}
         </p>
-      </div>
+      </header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-5">
-        {isAdmin ? (
+      <div
+        className={`grid gap-5 ${
+          isAdmin ? "grid-cols-1 lg:grid-cols-[300px_1fr]" : "grid-cols-1"
+        }`}
+      >
+        {isAdmin && (
           <ConversationList
             activeId={activeConversationId}
             onSelect={setActiveConversationId}
           />
-        ) : null}
+        )}
         <ConversationView
           conversationId={activeConversationId}
           currentUid={user?.uid}
@@ -73,45 +75,48 @@ function ConversationList({ activeId, onSelect }) {
 
   return (
     <aside
-      className="rounded-xl border border-[#6A66EB]/25 bg-[#0A0A0F] p-3 max-h-[70vh] overflow-y-auto"
+      className="rounded-lg border border-white/8 bg-[#0A0A0F] p-2 max-h-[70vh] overflow-y-auto"
       data-testid="admin-conversations-list"
     >
-      <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#6A66EB]/70 px-2 py-1.5">
+      <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#A8A8B8] px-3 py-2">
         {conversations.length} conversation{conversations.length !== 1 ? "s" : ""}
       </p>
       {conversations.length === 0 ? (
         <p className="font-mono text-xs text-[#A8A8B8] p-3">Aucune conversation.</p>
       ) : (
-        <ul className="space-y-1.5">
-          {conversations.map((c) => (
-            <li key={c.id}>
-              <button
-                onClick={() => onSelect(c.id)}
-                className={`w-full text-left p-3 rounded-md border transition-all ${
-                  activeId === c.id
-                    ? "border-[#6A66EB] bg-[#6A66EB]/10"
-                    : "border-[#6A66EB]/15 bg-[#050508] hover:border-[#6A66EB]/40"
-                }`}
-                data-testid={`conversation-item-${c.id}`}
-              >
-                <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-full bg-[#6A66EB]/15 border border-[#6A66EB]/30 flex items-center justify-center flex-shrink-0">
-                    <User className="h-3.5 w-3.5 text-[#6A66EB]" />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="font-mono text-xs text-white truncate">
-                      {c.userEmail || c.id}
-                    </p>
-                    {c.lastMessage && (
-                      <p className="font-mono text-[10px] text-[#A8A8B8] truncate">
-                        {c.lastMessage}
+        <ul className="space-y-1">
+          {conversations.map((c) => {
+            const isActive = activeId === c.id;
+            return (
+              <li key={c.id}>
+                <button
+                  onClick={() => onSelect(c.id)}
+                  className={`w-full text-left p-3 rounded-md transition-all ${
+                    isActive
+                      ? "bg-[#6A66EB]/10 border-l-2 border-[#6A66EB]"
+                      : "border-l-2 border-transparent hover:bg-white/5"
+                  }`}
+                  data-testid={`conversation-item-${c.id}`}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-full bg-[#6A66EB]/15 border border-[#6A66EB]/25 flex items-center justify-center flex-shrink-0">
+                      <User className="h-3.5 w-3.5 text-[#6A66EB]" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="font-mono text-xs text-white truncate">
+                        {c.userEmail || c.id}
                       </p>
-                    )}
+                      {c.lastMessage && (
+                        <p className="font-mono text-[10px] text-[#A8A8B8] truncate mt-0.5">
+                          {c.lastMessage}
+                        </p>
+                      )}
+                    </div>
                   </div>
-                </div>
-              </button>
-            </li>
-          ))}
+                </button>
+              </li>
+            );
+          })}
         </ul>
       )}
     </aside>
@@ -158,7 +163,6 @@ function ConversationView({ conversationId, currentUid, isAdmin, userEmail, user
     if (!body || !conversationId) return;
     setSending(true);
     try {
-      // Upsert the conversation metadata
       await setDoc(
         doc(db, "conversations", conversationId),
         {
@@ -185,13 +189,15 @@ function ConversationView({ conversationId, currentUid, isAdmin, userEmail, user
 
   return (
     <section
-      className="rounded-xl border border-[#6A66EB]/25 bg-[#0A0A0F] flex flex-col"
+      className="rounded-lg border border-white/8 bg-[#0A0A0F] flex flex-col overflow-hidden"
       style={{ minHeight: "70vh" }}
       data-testid="conversation-view"
     >
       {!conversationId ? (
-        <div className="flex-1 flex flex-col items-center justify-center p-10 text-center">
-          <MessageSquare className="h-10 w-10 text-[#6A66EB]/40 mb-3" />
+        <div className="flex-1 flex flex-col items-center justify-center p-12 text-center">
+          <div className="w-14 h-14 rounded-full bg-[#6A66EB]/5 border border-[#6A66EB]/20 flex items-center justify-center mb-4">
+            <MessageSquare className="h-5 w-5 text-[#6A66EB]/50" />
+          </div>
           <p className="font-mono text-sm text-[#A8A8B8]">
             Sélectionne une conversation pour démarrer.
           </p>
@@ -200,32 +206,55 @@ function ConversationView({ conversationId, currentUid, isAdmin, userEmail, user
         <>
           <div
             ref={scrollRef}
-            className="flex-1 overflow-y-auto p-5 space-y-3"
+            className="flex-1 overflow-y-auto p-6 space-y-4"
             data-testid="messages-list"
           >
             {messages.length === 0 ? (
-              <p className="font-mono text-xs text-[#A8A8B8] text-center mt-10">
-                Aucun message. Lance la conversation 👇
-              </p>
+              <div className="flex-1 flex flex-col items-center justify-center text-center py-16">
+                <div className="w-14 h-14 rounded-full bg-[#6A66EB]/5 border border-[#6A66EB]/20 flex items-center justify-center mb-4">
+                  <MessageSquare className="h-5 w-5 text-[#6A66EB]/50" />
+                </div>
+                <p className="font-mono text-sm text-[#A8A8B8]">
+                  Aucun message — lance la conversation.
+                </p>
+              </div>
             ) : (
-              messages.map((m) => {
+              messages.map((m, i) => {
                 const mine = isAdmin ? m.from === "admin" : m.from === "user";
+                const showAvatar =
+                  i === 0 || messages[i - 1]?.from !== m.from;
                 return (
                   <div
                     key={m.id}
-                    className={`flex ${mine ? "justify-end" : "justify-start"}`}
+                    className={`flex items-end gap-2 ${
+                      mine ? "justify-end" : "justify-start"
+                    }`}
                     data-testid={`message-${m.id}`}
                   >
+                    {!mine && (
+                      <div
+                        className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 ${
+                          showAvatar ? "opacity-100" : "opacity-0"
+                        } ${
+                          m.from === "admin"
+                            ? "bg-[#6A66EB]/20 border border-[#6A66EB]/40"
+                            : "bg-white/5 border border-white/10"
+                        }`}
+                      >
+                        {m.from === "admin" ? (
+                          <Shield className="h-3 w-3 text-[#6A66EB]" />
+                        ) : (
+                          <User className="h-3 w-3 text-[#A8A8B8]" />
+                        )}
+                      </div>
+                    )}
                     <div
-                      className={`max-w-[80%] rounded-lg px-4 py-2.5 border ${
+                      className={`max-w-[75%] rounded-2xl px-4 py-2.5 ${
                         mine
-                          ? "bg-[#6A66EB] text-white border-[#6A66EB]"
-                          : "bg-[#050508] text-[#EDEDED] border-[#6A66EB]/25"
+                          ? "bg-[#6A66EB] text-white rounded-br-sm"
+                          : "bg-[#050508] border border-white/8 text-[#EDEDED] rounded-bl-sm"
                       }`}
                     >
-                      <p className="font-mono text-[9px] uppercase tracking-wider opacity-70 mb-0.5">
-                        {m.from === "admin" ? "Admin" : "Utilisateur"}
-                      </p>
                       <p className="font-mono text-sm whitespace-pre-wrap break-words leading-relaxed">
                         {m.text}
                       </p>
@@ -238,20 +267,20 @@ function ConversationView({ conversationId, currentUid, isAdmin, userEmail, user
 
           <form
             onSubmit={send}
-            className="border-t border-[#6A66EB]/15 p-3 flex gap-2"
+            className="border-t border-white/5 p-3 flex gap-2 bg-[#050508]/50"
             data-testid="message-form"
           >
             <Input
               value={text}
               onChange={(e) => setText(e.target.value)}
               placeholder={placeholder}
-              className="bg-[#050508] border-[#6A66EB]/30 text-white font-mono focus-visible:ring-[#6A66EB]"
+              className="bg-[#0A0A0F] border-white/10 text-white font-mono focus-visible:ring-[#6A66EB] focus-visible:border-[#6A66EB] h-10"
               data-testid="message-input"
             />
             <Button
               type="submit"
               disabled={sending || !text.trim()}
-              className="bg-[#6A66EB] hover:bg-[#5853D6] text-white font-mono uppercase tracking-wider text-xs"
+              className="bg-[#6A66EB] hover:bg-[#5853D6] text-white h-10 px-4"
               data-testid="message-send-btn"
             >
               <Send className="h-4 w-4" />
