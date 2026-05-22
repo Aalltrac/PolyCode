@@ -95,6 +95,22 @@ code {
     transition: filter 0.05s linear;
 }
 
+.line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Hide scrollbars on the horizontal category nav */
+.scrollbar-none::-webkit-scrollbar {
+    display: none;
+}
+.scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
 @layer base {
     [data-debug-wrapper=\"true\"] {
         display: contents !important;
